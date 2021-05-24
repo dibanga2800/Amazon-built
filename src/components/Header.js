@@ -9,6 +9,7 @@ import { signIn, signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { selectItems } from "../slices/basketSlice";
+import { getSession } from "next-auth/client";
 
 function Header() {
   const [session] = useSession();
@@ -16,7 +17,7 @@ function Header() {
   const items = useSelector(selectItems);
 
   return (
-    <header>
+    <header style={{ position: "sticky", top: 0, zIndex: 50 }}>
       {/* Top Nav */}
       <div className="flex items-center bg-amazon_blue p-1 flex-grow py-2">
         <div className="mt-2 flex items-center flex-grow sm:flex-grow-0">
@@ -52,7 +53,7 @@ function Header() {
             <p className="font-extrabold md:text-sm">Account & List</p>
           </div>
 
-          <div className="link">
+          <div onClick={() => router.push("/orders")} className="link">
             <p>Returns</p>
             <p className="font-extrabold md:text-sm">& Orders</p>
           </div>
@@ -94,3 +95,14 @@ function Header() {
 }
 
 export default Header;
+
+//solving refreshing/breaking issues
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
