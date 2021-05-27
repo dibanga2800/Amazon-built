@@ -1,17 +1,17 @@
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import {
   MenuIcon,
   SearchIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/outline";
 import { signIn, signOut, useSession } from "next-auth/client";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { selectItems } from "../slices/basketSlice";
 import { getSession } from "next-auth/client";
 
-function Header() {
+function Header(props) {
   const [session] = useSession();
   const router = useRouter();
   const items = useSelector(selectItems);
@@ -31,12 +31,17 @@ function Header() {
           />
         </div>
 
-        {/*search*/}
-
-        <div className="hidden sm:flex items-center h-10 rounded-md flex-grow cursor-pointer bg-yellow-400 hover:bg-yellow-500">
+        {/* Custom search bar */}
+        <div className="hidden sm:flex items-center h-10 rounded-md bg-yellow-400 hover:bg-yellow-500 flex-grow cursor-pointer">
           <input
-            className="p-2 h-full w-6 flex-grow flex-shrink rounded-l-md focus:outline-none p-x-4"
             type="text"
+            className="p-2 h-full w-6 flex-grow flex-shrink rounded-l-md focus:outline-none"
+            placeholder={
+              router.route === "/" ? "🔎 Search in products listed below…" : ""
+            }
+            onInput={(event) =>
+              router.route === "/" && props.onSearchValue(event.target.value)
+            }
           />
           <SearchIcon className="h-12 p-4" />
         </div>
