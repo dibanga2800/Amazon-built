@@ -7,7 +7,9 @@ import CheckoutProduct from "../components/CheckoutProduct";
 import Currency from "react-currency-formatter";
 import { useSession } from "next-auth/client";
 import { loadStripe } from "@stripe/stripe-js";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import axios from "axios";
+import { groupBy } from "lodash";
 
 const stripePromise = loadStripe(process.env.stripe_public_key);
 
@@ -33,6 +35,7 @@ function Checkout() {
     if (result.error) alert(result.error.message);
   };
 
+  const groupedItems = Object.values(groupBy(items, "id"));
   return (
     <div className="bg-gray-100">
       <Header />
@@ -46,24 +49,34 @@ function Checkout() {
             height={250}
             objectFit="contain"
           />
-          <div className="flex flex-col p-5 space-y-10 bg-gray-100">
+          <div className="flex flex-col p-5 space-y-10 bg-gray-100 ">
             <h1 className="text-3xl border-b pb-4">
               {items.length === 0
                 ? "Your Amazon basket is empty."
                 : "Shopping Basket"}
             </h1>
-            {items.map((item, i) => (
-              <CheckoutProduct
-                key={i}
-                id={item.id}
-                title={item.title}
-                rating={item.rating}
-                price={item.price}
-                description={item.description}
-                image={item.image}
-                hasPrime={item.hasPrime}
-              />
-            ))}
+
+            <TransitionGroup>
+              {groupedItems.map((group, i) => (
+                <CSSTransition
+                  key={group[0].image}
+                  timeout={500}
+                  classNames="item"
+                >
+                  <CheckoutProduct
+                    id={group[0].id}
+                    title={group[0].title}
+                    rating={group[0].rating}
+                    price={group[0].price}
+                    description={group[0].description}
+                    category={group[0].category}
+                    image={group[0].image}
+                    hasPrime={group[0].hasPrime}
+                    quantity={group.length}
+                  />
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
           </div>
         </div>
 

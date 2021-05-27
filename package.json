@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "firebase": "^8.6.2",
     "firebase-admin": "^9.8.0",
+    "lodash": "^4.17.21",
     "micro": "^9.3.4",
     "moment": "^2.29.1",
     "next": "latest",
@@ -24,6 +25,9 @@
     "react-dom": "17.0.1",
     "react-redux": "7.2.2",
     "react-responsive-carousel": "^3.2.18",
+    "react-toastify": "^7.0.4",
+    "react-transition-group": "^4.4.1",
+    "storageservice": "^1.0.2",
     "stripe": "^8.149.0"
   },
   "license": "MIT",

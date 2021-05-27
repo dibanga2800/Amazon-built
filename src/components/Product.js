@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StarIcon } from "@heroicons/react/solid";
 import Currency from "react-currency-formatter";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { addToBasket } from "../slices/basketSlice";
 
 const MAX_RATING = 5;
@@ -26,10 +27,29 @@ function Product({ id, title, price, description, category, image }) {
     };
     //sending the product as an action to the REDUX store... the basket slice
     dispatch(addToBasket(product));
+
+    toast.success(
+      <>
+        <span className="font-bold">Added to basket!</span>
+        <br />
+        {product.title.slice(0, 30)}
+        {product.title.length > 30 ? "…" : ""}
+      </>,
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        draggablePercent: 20,
+        progress: undefined,
+      }
+    );
   };
 
   return (
-    <div className="relative flex flex-col m-5 bg-white z-30 p-10">
+    <div className="relative flex flex-col m-5 bg-white z-30 p-10 growing-hover">
       <p className="absolute top-2 right-2 text-xs italic text-gray-400">
         {category}
       </p>
