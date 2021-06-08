@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import { auth, provider } from "../firebase";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDrhP8zvOMRYAOOEcBUVk116GCLLR2PF4Q",
@@ -13,6 +14,10 @@ const app = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();
 
+const auth = app.auth();
+const provider = new firebase.auth.FacebookAuthProvider();
 const db = app.firestore();
 
 export default db;
+
+export { auth, provider };
